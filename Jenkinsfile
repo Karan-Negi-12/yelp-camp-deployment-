@@ -62,7 +62,7 @@ pipeline {
                 echo 'Building the Docker Image From Dockerfile'
                 script {
                     env.IMAGE_TAG = "v0.${env.BUILD_NUMBER}"
-                    sh "docker build -t devopskarannegi/3-tier-application:v0.${env.BUILD_NUMBER} . "
+                    sh "docker build -t devopskarannegi/yelp-camp-deployment:v0.${env.BUILD_NUMBER} . "
                 }
             }
         }
@@ -94,7 +94,25 @@ pipeline {
                     sh 'docker logout'
                 }
             }
+        }  
+        stage('Deploy to Kubernetes Cluster') {
+            steps {
+                echo "Deploying the Application to Kubernetes Cluster"
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
+                sh "kubectl apply -f dss.yml"
+            }
+            }
         }
+        stage('Verifying the deplyoment to Kubernetes Cluster') {
+            steps {
+                echo "checking the deployment to Kubernetes Cluster"
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
+                sh "kubectl pods -n webapp"
+                sh "kubectl get svc -n webapp"
+            }
+            }
+        } 
+        
     }
     post {
         always {
@@ -110,3 +128,4 @@ pipeline {
         }
     }
 }
+
