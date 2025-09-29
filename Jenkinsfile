@@ -100,7 +100,7 @@ pipeline {
                 echo "Deploying the Application to Kubernetes Cluster"
                 withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
                 sh "kubectl apply -f dss.yml"
-                sleep 60 
+                sleep 200 
             }
             }
         }
@@ -143,9 +143,10 @@ pipeline {
                     subject: "${jobName} - Build ${buildNumber} - ${pipelineStatus.toUpperCase()}",
                     body: body,
                     to: 'knegi2003@gmail.com',
-                    from: 'jenkins@gmail.com',
-                    replyTo: 'jenkins@gmail.com',
-                    mimeType: 'text/html'
+                    from: 'jenkins@example.com',
+                    replyTo: 'jenkins@example.com',
+                    mimeType: 'text/html',
+                    attachmentsPattern: 'trivy-image-report.html,trivy-fs-html'
                 )
             } 
         }
