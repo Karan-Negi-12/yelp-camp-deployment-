@@ -13,7 +13,7 @@ pipeline {
         stage('Git Checkout') {
             steps {
                 echo "Cloning the repository from GitHub"
-                git url: 'https://github.com/Karan-Negi-12/3-Tier-Application-Deplyoment.git', branch: 'master'
+                git url: 'https://github.com/Karan-Negi-12/yelp-camp-deployment-.git', branch: 'main'
             }
         }
 
@@ -43,7 +43,7 @@ pipeline {
             }
         }
 
-        stage('Running Trivy FS Scan') {
+        stage('Running Trivy File System Scan') {
             steps {
                 echo 'Generating Trivy FS Scan Report....'
                 sh "trivy fs --format table -o trivy-fs-html . "
@@ -71,16 +71,16 @@ pipeline {
             steps {
                 echo 'Scanning Docker Image with Trivy'
                 script{
-                    sh "trivy image --format table -o trivy-image-html devopskarannegi/3-tier-application:${env.IMAGE_TAG}"
+                    sh "trivy image --format table -o trivy-image-html devopskarannegi/yelp-camp-deployment:${env.IMAGE_TAG}"
                 }
             }
         }
         stage('Docker Image test') {
             steps{
                 script {
-                    sh "docker run -d -p 3000:80 --name test-container devopskarannegi/3-tier-application:${env.IMAGE_TAG}"
+                    sh "docker run -d -p 3000:3000 --name test-container devopskarannegi/yelp-camp-deployment:${env.IMAGE_TAG}"
                     sh 'sleep 10'
-                    sh "curl -f http://localhost:80 || exit 1"
+                    sh "curl -f http://localhost:3000 || exit 1"
                 }
             }
         }
@@ -90,7 +90,7 @@ pipeline {
                 script {
                     echo 'Pushing the Docker Image to Docker Hub'
                     sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin' 
-                    sh "docker push devopskarannegi/3-tier-application:${IMAGE_TAG}"
+                    sh "docker push devopskarannegi/yelp-camp-deployment:${IMAGE_TAG}"
                     sh 'docker logout'
                 }
             }
