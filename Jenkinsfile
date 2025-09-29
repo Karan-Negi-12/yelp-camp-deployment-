@@ -53,7 +53,7 @@ pipeline {
             steps {
                 echo 'Running SonarQube Scan....'
                 withSonarQubeEnv('sonar'){
-                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=3-Tier-Application-Deplyoment -Dsonar.projectName=3-Tier-Application-Deplyoment" 
+                    sh "$SCANNER_HOME/bin/sonar-scanner -Dsonar.projectKey=yelp-camp-deployment -Dsonar.projectName=yelp-camp-deployment" 
                 }
             }
         }
