@@ -100,6 +100,7 @@ pipeline {
                 echo "Deploying the Application to Kubernetes Cluster"
                 withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
                 sh "kubectl apply -f dss.yml"
+                sleep 60 
             }
             }
         }
@@ -107,12 +108,12 @@ pipeline {
             steps {
                 echo "checking the deployment to Kubernetes Cluster"
                 withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
-                sh "kubectl pods -n webapp"
+                sh "kubectl get pods -n webapp"
                 sh "kubectl get svc -n webapp"
             }
             }
         } 
-        
+
     }
     post {
         always {
