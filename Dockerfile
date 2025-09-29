@@ -1,6 +1,6 @@
 FROM node:22-alpine
 
-LABEL BaseImage="Node.js 18 Alpine"
+LABEL BaseImage="Node.js 22 Alpine"
 LABEL org.opencontainers.image.title="yelp-camp Website"               
 LABEL org.opencontainers.image.description="Node.js application container for yelp-camp Website"  
 LABEL org.opencontainers.image.version="1.0"                           
