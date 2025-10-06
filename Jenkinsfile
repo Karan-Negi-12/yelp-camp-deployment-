@@ -98,18 +98,18 @@ pipeline {
         stage('Deploy to Kubernetes Cluster') {
             steps {
                 echo "Deploying the Application to Kubernetes Cluster"
-                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'yelp-token', namespace: 'yelp-camp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.6:6443') {
                 sh "kubectl apply -f dss.yml"
-                sleep 200 
+                sleep 100 
             }
             }
         }
         stage('Verifying the deplyoment to Kubernetes Cluster') {
             steps {
                 echo "checking the deployment to Kubernetes Cluster"
-                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'k8-token', namespace: 'webapp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.5:6443') {
-                sh "kubectl get pods -n webapp"
-                sh "kubectl get svc -n webapp"
+                withKubeConfig(caCertificate: '', clusterName: 'kubernetes', contextName: '', credentialsId: 'yelp-token', namespace: 'yelp-camp', restrictKubeConfigAccess: false, serverUrl: 'https://10.0.0.6:6443') {
+                sh "kubectl get pods -n yelp-camp"
+                sh "kubectl get svc -n yelp-camp"
             }
             }
         } 
